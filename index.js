@@ -39,18 +39,29 @@ const userSchema = new mongoose.Schema({
   username: String,
 });
 
-let userModel = mongoose.model("User", userSchema);
+let User = mongoose.model("User", userSchema);
 
-app.post("/api/users", function (req, res) {
+app.post("/api/users", async function (req, res) {
   const username = req.body.username;
   console.log(req.body);
-
-  const mongoUser = new userModel({
-    username: username,
-  });
-  mongoUser.save();
-  res.json(mongoUser);
+  try {
+    const existingUsername = await User.findOne({ username: username });
+    if (existingUsername) {
+      res.json({ username: username });
+    } else {
+      const mongoUser = new User({
+        username: username,
+      });
+      mongoUser.save();
+      res.json(mongoUser);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "server error" });
+  }
 });
+
+app.get("/api/users", function (req, res) {});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);

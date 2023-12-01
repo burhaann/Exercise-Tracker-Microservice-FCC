@@ -86,6 +86,7 @@ app.get("/api/users", async function (req, res) {
 app.post("/api/users/:_id/exercises", async function (req, res) {
   const _id = req.params._id;
   const { description, duration, date } = req.body;
+  console.log("request body");
   console.log(req.body);
 
   try {

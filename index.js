@@ -63,6 +63,7 @@ app.post("/api/users", async function (req, res) {
 
 app.get("/api/users", function (req, res) {
   const allUsers = User.find({});
+  console.log(allUsers);
   res.send(allUsers);
 });
 

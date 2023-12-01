@@ -41,6 +41,16 @@ const userSchema = new mongoose.Schema({
 
 let User = mongoose.model("User", userSchema);
 
+const exerciseSchema = new mongoose.Schema({
+  username: String,
+  description: String,
+  duration: Number,
+  date: Date,
+});
+
+let Exercise = mongoose.model("Exercise", exerciseSchema);
+
+//creating a new user
 app.post("/api/users", async function (req, res) {
   const username = req.body.username;
   console.log(req.body.username);
@@ -61,11 +71,42 @@ app.post("/api/users", async function (req, res) {
   }
 });
 
+//getting all users from the database
 app.get("/api/users", async function (req, res) {
-  const allUsers = await User.find({}).select("username _id");
-  console.log("All Users");
-  console.log(allUsers);
-  res.send(allUsers);
+  User.find({})
+    .select("username _id")
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((error) => {
+      res.status(error.status);
+    });
+});
+
+app.post("/api/users/:_id/exercises", async (req, res) => {
+  const _id = req.params._id;
+  const { description, duration, date } = req.body;
+
+  try {
+    const user = await User.findById(_id);
+    if (!user) return res.json({ error: "User not found" });
+
+    const exercise = await Exercise.create({
+      username: user.username,
+      description,
+      duration,
+      date,
+    });
+    res.json({
+      _id: user._id,
+      username: user.username,
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date.toDateString(),
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

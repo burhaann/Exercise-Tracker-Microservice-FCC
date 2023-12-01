@@ -43,7 +43,7 @@ let User = mongoose.model("User", userSchema);
 
 app.post("/api/users", async function (req, res) {
   const username = req.body.username;
-  console.log(req.body);
+  console.log(req.body.username);
   try {
     const existingUsername = await User.findOne({ username: username });
     if (existingUsername) {
@@ -61,8 +61,8 @@ app.post("/api/users", async function (req, res) {
   }
 });
 
-app.get("/api/users", function (req, res) {
-  const allUsers = User.find({});
+app.get("/api/users", async function (req, res) {
+  const allUsers = await User.find({});
   console.log("All Users");
   console.log(allUsers);
   res.send(allUsers);

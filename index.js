@@ -13,6 +13,10 @@ app.get("/", (req, res) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
+    const listener = app.listen(process.env.PORT || 3000, () => {
+      console.log("Your app is listening on port " + listener.address().port);
+    });
+
     console.log("Connected to database ");
   })
   .catch((err) => {
@@ -29,6 +33,6 @@ db.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
 
-const listener = app.listen(process.env.PORT || 3000, () => {
-  console.log("Your app is listening on port " + listener.address().port);
-});
+// const listener = app.listen(process.env.PORT || 3000, () => {
+//   console.log("Your app is listening on port " + listener.address().port);
+// });

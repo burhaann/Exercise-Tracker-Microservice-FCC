@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    const listener = app.listen(process.env.PORT || 3000, () => {
-      console.log("Your app is listening on port " + listener.address().port);
-    });
+    // const listener = app.listen(process.env.PORT || 3000, () => {
+    //   console.log("Your app is listening on port " + listener.address().port);
+    // });
 
     console.log("Connected to database ");
   })
@@ -51,6 +51,6 @@ app.post("/api/users", function (req, res) {
   mongoUser.save();
 });
 
-// const listener = app.listen(process.env.PORT || 3000, () => {
-//   console.log("Your app is listening on port " + listener.address().port);
-// });
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log("Your app is listening on port " + listener.address().port);
+});

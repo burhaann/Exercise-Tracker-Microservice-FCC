@@ -4,6 +4,12 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
+app.use(cors());
+app.use(express.static("public"));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/views/index.html");
+});
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -13,10 +19,14 @@ mongoose
     console.error(`Error connecting to the database. \n${err}`);
   });
 
-app.use(cors());
-app.use(express.static("public"));
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/views/index.html");
+const db = mongoose.connection;
+
+db.on("connected", () => {
+  console.log("Connected to MongoDB Atlas");
+});
+
+db.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

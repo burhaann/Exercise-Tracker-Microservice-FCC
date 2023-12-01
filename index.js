@@ -41,6 +41,9 @@ let userModel = mongoose.model("User", userSchema);
 
 app.post("/api/users", function (req, res) {
   const username = req.body.username;
+  console.log(req);
+  console.log(req.body);
+
   const mongoUser = new userModel({
     username: username,
   });

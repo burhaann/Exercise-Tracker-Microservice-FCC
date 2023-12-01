@@ -33,6 +33,20 @@ db.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
 
+const userSchema = new mongoose.Schema({
+  username: String,
+});
+
+let userModel = mongoose.model("User", userSchema);
+
+app.post("/api/users", function (req, res) {
+  const username = req.body.username;
+  const mongoUser = new userModel({
+    username: username,
+  });
+  mongoUser.save();
+});
+
 // const listener = app.listen(process.env.PORT || 3000, () => {
 //   console.log("Your app is listening on port " + listener.address().port);
 // });

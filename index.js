@@ -49,6 +49,7 @@ app.post("/api/users", function (req, res) {
     username: username,
   });
   mongoUser.save();
+  res.json(mongoUser);
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

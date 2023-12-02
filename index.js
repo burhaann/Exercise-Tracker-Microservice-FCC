@@ -95,7 +95,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   // if (!date) {
   //   date = new Date();
   // }
-  date = date ? new Date(date).toDateString() : new Date().toDateString();
+  // date = date ? new Date(date).toDateString() : new Date().toDateString();
   console.log(date);
   try {
     const user = await User.findById(_id);
@@ -106,7 +106,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
       username: user.username,
       description,
       duration,
-      date,
+      date: date ? new Date(date).toDateString() : new Date().toDateString(),
     });
     exercise
       .save()

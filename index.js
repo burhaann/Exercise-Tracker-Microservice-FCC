@@ -47,7 +47,7 @@ const exerciseSchema = new mongoose.Schema({
   username: String,
   description: String,
   duration: Number,
-  date: Date,
+  date: String,
 });
 
 let Exercise = mongoose.model("Exercise", exerciseSchema);

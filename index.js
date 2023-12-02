@@ -119,12 +119,22 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   }
 });
 
-app.get("/api/users/:_id/logs", function (req, res) {
+app.get("/api/users/:_id/logs", async function (req, res) {
   const _id = req.params._id;
+  let log;
+  const user = await User.findById(_id);
   Exercise.find({ userid: _id })
     .select("-__v")
     .then((users) => {
-      res.send(users);
+      log = {
+        username: user.username,
+        count: users.length(),
+        _id: user._id,
+        log: users,
+      };
+
+      res.send(log);
+      console.log(users);
       console.log(users);
     });
 });

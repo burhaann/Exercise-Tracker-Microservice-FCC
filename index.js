@@ -109,13 +109,13 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     });
     exercise
       .save()
-      .then(() => {
+      .then((exercise) => {
         res.json({
-          _id: user._id,
-          username: user.username,
-          description,
-          duration,
-          date,
+          _id: exercise._id,
+          username: exercise.username,
+          description: exercise.description,
+          duration: exercise.duration,
+          date: exercise.date,
         });
       })
       .catch((err) => {

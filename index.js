@@ -109,17 +109,16 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     })
       .save()
       .then(() => {
-        res
-          .json({
-            _id: user._id,
-            username: user.username,
-            description,
-            duration,
-            date,
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        res.json({
+          _id: user._id,
+          username: user.username,
+          description,
+          duration,
+          date,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
   } catch (err) {
     res.status(500).json({ error: err.message });

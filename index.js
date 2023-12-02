@@ -95,7 +95,8 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   // if (!date) {
   //   date = new Date();
   // }
-  date ? new Date(date).toDateString() : new Date().toDateString();
+  date = date ? new Date(date).toDateString() : new Date().toDateString();
+  console.log(date);
   try {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });

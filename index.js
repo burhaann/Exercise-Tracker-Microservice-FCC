@@ -98,7 +98,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });
 
-    const exercise = await Exercise.create({
+    const exercise = await Exercise.save({
       // _id: user._id,
       username: user.username,
       description,
@@ -111,42 +111,6 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
       description: exercise.description,
       duration: exercise.duration,
       date: exercise.date.toDateString(),
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get("/api/users/:_id/logs", async (req, res) => {
-  const { _id } = req.params;
-  const { from, to, limit } = req.query;
-
-  try {
-    const user = await User.findById(_id);
-    if (!user) return res.json({ error: "User not found" });
-
-    let query = { username: user.username };
-    if (from || to) {
-      query.date = {};
-      if (from) query.date.$gte = new Date(from);
-      if (to) query.date.$lte = new Date(to);
-    }
-
-    let log = await Exercise.find(query)
-      .limit(limit ? parseInt(limit) : undefined)
-      .exec();
-
-    log = log.map((exercise) => ({
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date.toDateString(),
-    }));
-
-    res.json({
-      _id: user._id,
-      username: user.username,
-      count: log.length,
-      log,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

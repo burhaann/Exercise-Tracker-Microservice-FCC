@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 let User = mongoose.model("User", userSchema);
 
 const exerciseSchema = new mongoose.Schema({
-  _id: String,
+  // _id: String,
   username: String,
   description: String,
   duration: Number,
@@ -90,12 +90,16 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   console.log("request body");
   console.log(req.body);
 
+  if (!date) {
+    date = new Date();
+  }
+
   try {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });
 
     const exercise = await Exercise.create({
-      _id: user._id,
+      // _id: user._id,
       username: user.username,
       description,
       duration,

@@ -88,9 +88,9 @@ app.get("/api/users", async function (req, res) {
 //adding exercise field
 app.post("/api/users/:_id/exercises", async function (req, res) {
   const _id = req.params._id;
-  const { description, duration, date } = req.body;
-  console.log("request body");
-  console.log(req.body);
+  let { description, duration, date } = req.body;
+  // console.log("request body");
+  // console.log(req.body);
 
   if (!date) {
     date = new Date();
@@ -119,9 +119,9 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   }
 });
 
-app.get("/api/users/:_id/logs", function (req, res) {
+app.get("/api/users/:_id/logs", async function (req, res) {
   const _id = req.params._id;
-  const log = Exercise.find({ userid: _id });
+  const log = await Exercise.find({ userid: _id });
   console.log(log);
 });
 

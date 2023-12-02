@@ -161,13 +161,27 @@ app.get("/api/users/:_id/logs", async function (req, res) {
   const exercises = await Exercise.find({ userid: _id });
   console.log(exercises);
 
-  // log = {
-  //   username: user.username,
-  //   count: users.length,
-  //   _id: _id,
-  //   log: exercises,
-  // };
+  const filteredLog = exercises.filter((exercise) => {
+    if (from && to) {
+      return new Date(exercise.date) >= from && new Date(exercise.date) <= to;
+    } else if (from && !to) {
+      return new Date(exercise.date) >= from;
+    } else if (!from && to) {
+      return new Date(exercise.date) <= to;
+    } else {
+      return true;
+    }
+  });
 
+  let limitedLog = limit > 0 ? filteredLog.slice(0, limit) : filteredLog;
+
+  log = {
+    username: user.username,
+    count: exercises.length,
+    _id: _id,
+    log: limitedLog,
+  };
+  res.json(log);
   // let dateObj = {};
   // if (from) {
   //   dateObj["$gte"] = new Date(from);
@@ -197,20 +211,20 @@ app.get("/api/users/:_id/logs", async function (req, res) {
   //   log,
   // });
 
-  Exercise.find({ userid: _id })
-    .select("-__v")
-    .then((users) => {
-      log = {
-        username: user.username,
-        count: users.length,
-        _id: user._id,
-        log: users,
-      };
-      res.send(log);
+  // Exercise.find({ userid: _id })
+  //   .select("-__v")
+  //   .then((users) => {
+  //     log = {
+  //       username: user.username,
+  //       count: users.length,
+  //       _id: user._id,
+  //       log: users,
+  //     };
+  //     res.send(log);
 
-      // console.log(users);
-      // console.log(log);
-    });
+  // console.log(users);
+  // console.log(log);
+  // });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

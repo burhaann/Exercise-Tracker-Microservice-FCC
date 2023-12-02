@@ -139,49 +139,49 @@ app.get("/api/users/:_id/logs", async function (req, res) {
   if (!user) {
     return res.send("couldn't find user");
   }
-  let dateObj = {};
-  if (from) {
-    dateObj["$gte"] = new Date(from);
-  }
-  if (to) {
-    dateObj["$lte"] = new Date(to);
-  }
-  let filter = {
-    userid: _id,
-  };
+  // let dateObj = {};
+  // if (from) {
+  //   dateObj["$gte"] = new Date(from);
+  // }
+  // if (to) {
+  //   dateObj["$lte"] = new Date(to);
+  // }
+  // let filter = {
+  //   userid: _id,
+  // };
 
-  if (from || to) {
-    filter.date = dateObj;
-  }
-  const exercises = await Exercise.find(filter).limit(+limit ?? 500);
+  // if (from || to) {
+  //   filter.date = dateObj;
+  // }
+  // const exercises = await Exercise.find(filter).limit(+limit ?? 500);
 
-  log = exercises.map((e) => ({
-    description: e.description,
-    duration: e.duration,
-    date: e.date.toDateString(),
-  }));
+  // log = exercises.map((e) => ({
+  //   description: e.description,
+  //   duration: e.duration,
+  //   date: e.date.toDateString(),
+  // }));
 
-  res.json({
-    username: user.username,
-    count: exercises.length,
-    _id: _id,
-    log,
-  });
-
-  // Exercise.find({ userid: _id })
-  //   .select("-__v")
-  //   .then((users) => {
-  //     log = {
-  //       username: user.username,
-  //       count: users.length,
-  //       _id: user._id,
-  //       log: users,
-  //     };
-  //     res.send(log);
-
-  // console.log(users);
-  // console.log(log);
+  // res.json({
+  //   username: user.username,
+  //   count: exercises.length,
+  //   _id: _id,
+  //   log,
   // });
+
+  Exercise.find({ userid: _id })
+    .select("-__v")
+    .then((users) => {
+      log = {
+        username: user.username,
+        count: users.length,
+        _id: user._id,
+        log: users,
+      };
+      res.send(log);
+
+      // console.log(users);
+      // console.log(log);
+    });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

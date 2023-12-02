@@ -98,7 +98,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });
 
-    const exercise = await Exercise.save({
+    const exercise = await Exercise.create({
       // _id: user._id,
       username: user.username,
       description,

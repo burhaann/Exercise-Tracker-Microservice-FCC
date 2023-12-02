@@ -121,10 +121,12 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
 
 app.get("/api/users/:_id/logs", function (req, res) {
   const _id = req.params._id;
-  Exercise.find({ userid: _id }).then((users) => {
-    res.send(users);
-    console.log(users);
-  });
+  Exercise.find({ userid: _id })
+    .select("-__v")
+    .then((users) => {
+      res.send(users);
+      console.log(users);
+    });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

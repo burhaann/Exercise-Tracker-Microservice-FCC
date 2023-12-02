@@ -112,7 +112,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
       username: user.username,
       description: exercise.description,
       duration: exercise.duration,
-      date: exercise.date.toDateString(),
+      date: exercise.date,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

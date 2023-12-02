@@ -92,10 +92,10 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   // console.log("request body");
   // console.log(req.body);
 
-  if (!date) {
-    date = new Date();
-  }
-
+  // if (!date) {
+  //   date = new Date();
+  // }
+  date ? new Date(date).toDateString() : new Date().toDateString();
   try {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });
@@ -105,7 +105,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
       username: user.username,
       description,
       duration,
-      date: date.toDateString(),
+      date,
     }).save();
     res.json({
       _id: user._id,

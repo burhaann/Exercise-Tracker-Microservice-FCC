@@ -182,6 +182,7 @@ app.get("/api/users/:_id/logs", async function (req, res) {
     log: limitedLog,
   };
   res.json(log);
+
   // let dateObj = {};
   // if (from) {
   //   dateObj["$gte"] = new Date(from);

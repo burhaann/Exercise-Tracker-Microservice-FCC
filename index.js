@@ -106,7 +106,9 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
       username: user.username,
       description,
       duration,
-      date: date ? new Date(date).toDateString() : new Date().toDateString(),
+      date: req.body.date
+        ? new Date(req.body.date).toDateString()
+        : new Date().toDateString(),
     });
     exercise
       .save()

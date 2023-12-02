@@ -121,8 +121,9 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
 
 app.get("/api/users/:_id/logs", async function (req, res) {
   const _id = req.params._id;
-  const log = await Exercise.find({ userid: _id });
-  console.log(log);
+  Exercise.find({ userid: _id }).then((users) => {
+    res.send(users);
+  });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

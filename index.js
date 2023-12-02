@@ -144,8 +144,8 @@ app.get("/api/users/:_id/logs", async function (req, res) {
       };
 
       res.send(log);
-      console.log(users);
-      console.log(log);
+      // console.log(users);
+      // console.log(log);
     });
 });
 

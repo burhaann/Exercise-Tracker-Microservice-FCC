@@ -100,7 +100,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     const user = await User.findById(_id);
     if (!user) return res.json({ error: "User not found" });
 
-    const exercise = await new Exercise({
+    const exercise = new Exercise({
       userid: user._id,
       username: user.username,
       description,

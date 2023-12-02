@@ -131,22 +131,57 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
 
 app.get("/api/users/:_id/logs", async function (req, res) {
   const _id = req.params._id;
+  const { from, to, limit } = req.query;
+  console.log(req.query);
+
   let log;
   const user = await User.findById(_id);
-  Exercise.find({ userid: _id })
-    .select("-__v")
-    .then((users) => {
-      log = {
-        username: user.username,
-        count: users.length,
-        _id: user._id,
-        log: users,
-      };
+  if (!user) {
+    return res.send("couldn't find user");
+  }
+  let dateObj = {};
+  if (from) {
+    dateObj["$gte"] = new Date(from);
+  }
+  if (to) {
+    dateObj["$lte"] = new Date(to);
+  }
+  let filter = {
+    userid: _id,
+  };
 
-      res.send(log);
-      // console.log(users);
-      // console.log(log);
-    });
+  if (from || to) {
+    filter.date = dateObj;
+  }
+  const exercises = await Exercise.find(filter).limit(+limit ?? 500);
+
+  log = exercises.map((e) => ({
+    description: e.description,
+    duration: e.duration,
+    date: e.date.toDateString(),
+  }));
+
+  res.json({
+    username: user.username,
+    count: exercises.length,
+    _id: _id,
+    log,
+  });
+
+  // Exercise.find({ userid: _id })
+  //   .select("-__v")
+  //   .then((users) => {
+  //     log = {
+  //       username: user.username,
+  //       count: users.length,
+  //       _id: user._id,
+  //       log: users,
+  //     };
+  //     res.send(log);
+
+  // console.log(users);
+  // console.log(log);
+  // });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {

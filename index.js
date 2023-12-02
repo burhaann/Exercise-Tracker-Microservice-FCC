@@ -129,16 +129,45 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
   }
 });
 
+function getDate(params) {
+  let date;
+  if (!params) {
+    date = null;
+  } else {
+    let dateObj = new Date(params);
+    if (dateObj.getTime()) {
+      date = dateObj;
+    } else {
+      date = null;
+    }
+  }
+  return date;
+}
+
 app.get("/api/users/:_id/logs", async function (req, res) {
   const _id = req.params._id;
-  const { from, to, limit } = req.query;
+  let { from, to, limit } = req.query;
   console.log(req.query);
+
+  from = getDate(from);
+  to = getDate(to);
+  limit = Number(limit ? limit : 0);
 
   let log;
   const user = await User.findById(_id);
   if (!user) {
     return res.send("couldn't find user");
   }
+  const exercises = await Exercise.find({ userid: _id });
+  console.log(exercises);
+
+  // log = {
+  //   username: user.username,
+  //   count: users.length,
+  //   _id: _id,
+  //   log: exercises,
+  // };
+
   // let dateObj = {};
   // if (from) {
   //   dateObj["$gte"] = new Date(from);
@@ -153,7 +182,7 @@ app.get("/api/users/:_id/logs", async function (req, res) {
   // if (from || to) {
   //   filter.date = dateObj;
   // }
-  // const exercises = await Exercise.find(filter).limit(+limit ?? 500);
+  // const exercises = await Exercise.find(filter).limit(limit ?? 500);
 
   // log = exercises.map((e) => ({
   //   description: e.description,

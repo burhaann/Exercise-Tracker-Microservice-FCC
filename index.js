@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 let User = mongoose.model("User", userSchema);
 
 const exerciseSchema = new mongoose.Schema({
-  // _id: String,
+  _id: ObjectId,
   username: String,
   description: String,
   duration: Number,
@@ -84,6 +84,7 @@ app.get("/api/users", async function (req, res) {
     });
 });
 
+//adding exercise field
 app.post("/api/users/:_id/exercises", async function (req, res) {
   const _id = req.params._id;
   const { description, duration, date } = req.body;
@@ -99,7 +100,7 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     if (!user) return res.json({ error: "User not found" });
 
     const exercise = await Exercise({
-      // _id: user._id,
+      _id: user._id,
       username: user.username,
       description,
       duration,
@@ -116,6 +117,8 @@ app.post("/api/users/:_id/exercises", async function (req, res) {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get("/api/users/:_id/logs", function (req, res) {});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);

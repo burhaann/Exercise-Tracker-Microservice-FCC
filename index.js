@@ -36,14 +36,14 @@ db.on("error", (err) => {
 });
 
 const userSchema = new mongoose.Schema({
-  _id: { type: mongoose.Schema.Types.ObjectId, ref: "id" },
   username: String,
 });
 
 let User = mongoose.model("User", userSchema);
 
 const exerciseSchema = new mongoose.Schema({
-  _id: { type: mongoose.Schema.Types.ObjectId, ref: "id" },
+  // _id: { type: mongoose.Schema.Types.ObjectId, ref: "id" },
+  _id: String,
   username: String,
   description: String,
   duration: Number,
